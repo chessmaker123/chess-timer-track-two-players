@@ -1,0 +1,445 @@
+
+<!-- resources/views/components/layout.blade.php -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Custom CSS for the layout -->
+    <style>
+        /* Add your styles here */
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #board {
+                max-width: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 8px;
+            }
+
+            .header,
+            .footer {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                padding: 8px 0;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 text-gray-900 font-sans leading-relaxed tracking-normal flex flex-col min-h-screen">
+    <header class="bg-gradient-to-r from-blue-700 to-green-700 text-white shadow-lg sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <a href="https://chessmoveexpert.com">
+                    <img src="img/logo/site-logo.jpg" alt="Check Move Expert Logo" class="h-10 w-auto">
+                </a>
+            </div>
+
+            <nav class="hidden md:flex space-x-6">
+                <a href="https://chessmoveexpert.com/find-best-chess-move"
+                    class="hover:text-gray-200">Find
+                    Best Move</a>
+                <a href="https://chessmoveexpert.com/find-move-checkmate"
+                    class="hover:text-gray-200">Find
+                    Move Checkmate</a>
+                <a href="https://chessmoveexpert.com/chess-timer-track-two-players"
+                    class="hover:text-gray-200">Timer</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="focus:outline-none">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <nav id="mobile-menu" class="md:hidden bg-blue-600 hidden">
+            <a href="https://chessmoveexpert.com/find-best-chess-move"
+                class="block px-4 py-2 text-white ">Find
+                Best Move</a>
+            <a href="https://chessmoveexpert.com/find-move-checkmate"
+                class="block px-4 py-2 text-white ">Find
+                Move Checkmate</a>
+            <a href="https://chessmoveexpert.com/chess-timer-track-two-players"
+                class="block px-4 py-2 text-white ">Timer</a>
+        </nav>
+    </header>
+
+        <style>
+        /* Rotate the white timer text only on mobile devices */
+        @media (max-width: 640px) {
+            #white-time {
+                transform: rotate(180deg);
+            }
+
+            .mobile-compact {
+                @apply mb-2;
+                /* Reduced margin between rows */
+            }
+
+            .mobile-padding {
+                @apply p-4;
+                /* Reduced padding inside timer boxes */
+            }
+        }
+
+        /* Add animation for time change */
+        #white-time,
+        #black-time {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        /* Animate scaling and opacity for a smoother effect */
+        .time-changing {
+            @apply transform scale-105 opacity-70;
+            animation: bounce 0.3s ease-out;
+        }
+    </style>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center px-4 py-8">
+        <div class="bg-white shadow-lg rounded-lg p-8 max-w-screen-lg w-full" style="width: 90%">
+            <h1 class="font-bold mb-6">Chess Timer</h1>
+            <p class="mb-6 hidden md:block">
+                The Chess Timer helps players keep track of time during their chess matches.
+                You can set the timer to count down from a specific number of minutes and
+                add extra seconds with each move if needed. This is ideal for competitive play
+                where precise time management is crucial.
+            </p>
+            <!-- Timer Display -->
+            <div id="timer" class="text-center mb-3">
+                <div class="flex flex-col sm:flex-row sm:justify-around mb-4">
+                    <div class="flex flex-col items-center">
+                        <div class="text-lg font-semibold mb-2">
+                            White Timer
+                        </div>
+                        <div id="white-time"
+                            class="text-6xl font-bold p-8 rounded-lg cursor-pointer transition-transform transform bg-gray-800 text-white">
+                            10:00
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center mt-6 sm:mt-0">
+                        <div class="text-lg font-semibold mb-2">
+                            Black Timer
+                        </div>
+                        <div id="black-time"
+                            class="text-6xl font-bold p-8 rounded-lg cursor-pointer transition-transform transform hover:scale-105 bg-gray-200 text-black">
+                            10:00
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mb-4">
+                    <div class="text-lg font-semibold">Time Difference</div>
+                    <div id="time-diff" class="text-3xl font-bold">00:00</div>
+                </div>
+            </div>
+            <div class="grid gap-4 mb-4">
+                <!-- Grid for Inputs -->
+                <div class="flex flex-col md:flex-row md:justify-center md:gap-4">
+                    <!-- Minutes Per Player -->
+                    <div class="flex flex-col mb-4 md:mb-0 md:w-1/3">
+                        <label for="minutes-per-player" class="block text-sm font-medium text-gray-700 mb-1">Minutes Per
+                            Player:</label>
+                        <input id="minutes-per-player" type="number" value="10" min="1"
+                            class="border border-gray-300 rounded-lg shadow-sm w-full px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+
+                    <!-- Timing Method -->
+                    <div class="flex flex-col mb-4 md:mb-0 md:w-1/3">
+                        <label for="timing-method" class="block text-sm font-medium text-gray-700 mb-1">Timing
+                            Method:</label>
+                        <select id="timing-method"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option value="standard">Standard</option>
+                            <option value="increment">Increment</option>
+                        </select>
+                    </div>
+
+                    <!-- Extra Seconds -->
+                    <div id="extra-seconds-section" class="flex flex-col mb-4 md:mb-0 md:w-1/3 hidden">
+                        <label for="extra-seconds" class="block text-sm font-medium text-gray-700 mb-1">Extra
+                            Seconds:</label>
+                        <input id="extra-seconds" type="number" value="5" min="1"
+                            class="border border-gray-300 rounded-lg shadow-sm w-full px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                </div>
+
+                <!-- Button Container -->
+                <div class="flex justify-center gap-4">
+                    <button id="start-pause-btn"
+                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded w-full sm:w-56 lg:w-64">
+                        Start
+                    </button>
+
+                    <button id="reset-btn"
+                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded w-full sm:w-56 lg:w-64">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript for Timer -->
+    <script>
+        let whiteTime = 600; // Default 10 minutes in seconds
+        let blackTime = 600;
+        let currentTurn = "white"; // White starts first
+        let timerInterval;
+        let minutesPerPlayer = 10;
+        let extraSeconds = 10;
+        let timingMethod = "standard";
+        let hasStarted = false; // Flag to check if timer has started
+
+        const whiteTimeEl = document.getElementById("white-time");
+        const blackTimeEl = document.getElementById("black-time");
+        const timeDiffEl = document.getElementById("time-diff");
+        const startPauseBtn = document.getElementById("start-pause-btn");
+        const resetBtn = document.getElementById("reset-btn");
+        const minutesPerPlayerEl = document.getElementById("minutes-per-player");
+        const extraSecondsEl = document.getElementById("extra-seconds");
+        const timingMethodEl = document.getElementById("timing-method");
+        const extraSecondsSection = document.getElementById("extra-seconds-section");
+
+        function playSound() {
+            const audio = new Audio("/audio/tap-notification.mp3");
+            audio.play();
+        }
+
+        function switchTurn() {
+            console.log("timingMethod", timingMethod);
+
+            if (timingMethod === "increment") {
+                if (currentTurn === "white") {
+                    console.log("whiteTime", whiteTime);
+                    console.log("extraSeconds", extraSeconds);
+
+                    whiteTime += extraSeconds; // Add extra seconds to white's time
+                    currentTurn = "black";
+                } else {
+                    blackTime += extraSeconds; // Add extra seconds to black's time
+                    console.log("whiteTime", blackTime);
+                    console.log("extraSeconds", blackTime);
+                    currentTurn = "white";
+                }
+            } else {
+                currentTurn = currentTurn === "white" ? "black" : "white";
+            }
+            playSound();
+            updateTimeDisplay();
+        }
+
+        function updateTimeDisplay() {
+            if (currentTurn === "white") {
+                whiteTimeEl.classList.add("time-changing");
+            } else {
+                blackTimeEl.classList.add("time-changing");
+            }
+            setTimeout(() => {
+                whiteTimeEl.textContent = formatTime(whiteTime);
+                blackTimeEl.textContent = formatTime(blackTime);
+                updateTimeDifference();
+
+                whiteTimeEl.classList.remove("time-changing");
+                blackTimeEl.classList.remove("time-changing");
+
+                if (currentTurn === "white") {
+                    whiteTimeEl.classList.replace("bg-gray-200", "bg-gray-800");
+                    whiteTimeEl.classList.replace("text-black", "text-white");
+                    blackTimeEl.classList.replace("bg-gray-800", "bg-gray-200");
+                    blackTimeEl.classList.replace("text-white", "text-black");
+                } else {
+                    blackTimeEl.classList.replace("bg-gray-200", "bg-gray-800");
+                    blackTimeEl.classList.replace("text-black", "text-white");
+                    whiteTimeEl.classList.replace("bg-gray-800", "bg-gray-200");
+                    whiteTimeEl.classList.replace("text-white", "text-black");
+                }
+            }, 500); // Match this duration with the CSS transition time
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+        }
+
+        function updateTimeDifference() {
+            const diff = Math.abs(whiteTime - blackTime);
+            timeDiffEl.textContent = formatTime(diff);
+        }
+
+        function startTimer() {
+            if (timerInterval) return; // Prevent starting multiple intervals
+            timerInterval = setInterval(() => {
+                if (currentTurn === "white") {
+                    if (whiteTime > 0) {
+                        whiteTime--;
+                    }
+                } else {
+                    if (blackTime > 0) {
+                        blackTime--;
+                    }
+                }
+                updateTimeDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null; // Reset the interval variable
+        }
+
+        function toggleStartPause() {
+            if (!hasStarted) {
+                startTimer();
+                startPauseBtn.textContent = "Pause";
+                startPauseBtn.classList.replace("bg-green-500", "bg-yellow-500");
+                startPauseBtn.classList.replace("hover:bg-green-600", "hover:bg-yellow-600");
+                hasStarted = true;
+            } else {
+                pauseTimer();
+                startPauseBtn.textContent = "Start";
+                startPauseBtn.classList.replace("bg-yellow-500", "bg-green-500");
+                startPauseBtn.classList.replace("hover:bg-yellow-600", "hover:bg-green-600");
+                hasStarted = false;
+            }
+        }
+
+        function resetTimer() {
+            pauseTimer(); // Stop the timer
+            minutesPerPlayer = parseInt(minutesPerPlayerEl.value) * 60;
+            extraSeconds = parseInt(extraSecondsEl.value);
+            timingMethod = timingMethodEl.value;
+            whiteTime = minutesPerPlayer;
+            blackTime = minutesPerPlayer;
+            currentTurn = "white"; // Reset to white's turn first
+            updateTimeDisplay();
+            hasStarted = false; // Reset the flag
+            startPauseBtn.textContent = "Start";
+            startPauseBtn.classList.replace("bg-yellow-500", "bg-green-500");
+            startPauseBtn.classList.replace("hover:bg-yellow-600", "hover:bg-green-600");
+        }
+
+        whiteTimeEl.addEventListener("click", () => {
+            if (hasStarted) { // Only switch turn if timer is started
+                if (currentTurn === "white") {
+                    switchTurn();
+                }
+            } else {
+                currentTurn = "white"; // Set to white's turn if timer is not started
+            }
+        });
+
+        blackTimeEl.addEventListener("click", () => {
+            if (hasStarted) { // Only switch turn if timer is started
+                if (currentTurn === "black") {
+                    switchTurn();
+                }
+            } else {
+                currentTurn = "black"; // Set to black's turn if timer is not started
+            }
+        });
+
+        timingMethodEl.addEventListener("change", () => {
+            if (timingMethodEl.value === "increment") {
+                extraSecondsSection.classList.remove("hidden");
+            } else {
+                extraSecondsSection.classList.add("hidden");
+            }
+        });
+
+        startPauseBtn.addEventListener("click", toggleStartPause);
+        resetBtn.addEventListener("click", resetTimer);
+
+        document.addEventListener("keydown", (event) => {
+            if (event.code === "Space") {
+                if (hasStarted) {
+                    switchTurn();
+                }
+                if (!hasStarted) {
+                    toggleStartPause();
+                }
+            }
+        });
+
+        updateTimeDisplay();
+    </script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a
+                    href="https://chessmoveexpert.com/" class="hover:underline">Chess Move Expert™</a>. All Rights
+                Reserved.
+            </span>
+            <ul class="flex space-x-4 text-sm flex-wrap items-center mx-auto px-4 flex justify-between items-center">
+                <li>
+                    <a href="https://chessmoveexpert.com/find-best-chess-move" class="hover:underline">Find Best Move</a>
+                </li>
+                <li>
+                    <a href="https://chessmoveexpert.com/find-move-checkmate" class="hover:underline">Find Move Checkmate</a>
+                </li>
+                <li>
+                    <a href="https://chessmoveexpert.com/chess-timer-track-two-players" class="hover:underline">Timer</a>
+                </li>
+                <li>
+                    <a href="https://chessmoveexpert.com/contact" class="hover:underline">Contact Us</a>
+                </li>
+                <li>
+                    <a href="https://chessmoveexpert.com/privacy-policy" class="hover:underline">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="https://chessmoveexpert.com/terms-and-conditions" class="hover:underline">Terms & Conditions</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+
+
+    <script>
+        // Toggle Mobile Menu
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const header = document.querySelector("header");
+
+        mobileMenuButton.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+
+        document.addEventListener("click", (event) => {
+            // Check if the clicked element is outside the header
+            if (!header.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                mobileMenu.classList.add("hidden");
+            }
+        });
+    </script>
+</body>
+
+</html>
