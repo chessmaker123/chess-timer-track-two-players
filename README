@@ -1,0 +1,27 @@
+# Chess Timer - Track Two Players
+
+Welcome to the Chess Timer project! This website provides a simple and intuitive chess timer that allows two players to track their time during a game. The timer is designed to be responsive and easy to use, whether you're playing a quick blitz game or a longer match.
+
+## Features
+- **Dual Timer**: Separate timers for both white and black players.
+- **Time Control**: Set the initial time, increment, and method for time management.
+- **Responsive Design**: Optimized for both desktop and mobile views.
+- **Sound Notifications**: Alerts when switching turns to help keep track of the game.
+- **Keyboard Support**: Use the spacebar to switch the clock between players.
+
+## How to Use
+1. Open the `index.html` file in your web browser or visit the live website.
+2. Set the initial time for both players, choose the increment, and select the timing method.
+3. Press the start button to begin the game. Use the spacebar or click on the timer to switch turns.
+4. The timer will automatically switch between the players, tracking the time difference.
+
+## Visit the Website
+Check out the live version of the Chess Timer: [Chess Timer - Track Two Players](https://chessmoveexpert.com/chess-timer-track-two-players)
+
+## Technologies Used
+- **Tailwind CSS** for styling.
+- **JavaScript** for timer functionality and event handling.
+- **HTML5 Audio** for sound notifications.
+
+## License
+This project is licensed under the MIT License.
